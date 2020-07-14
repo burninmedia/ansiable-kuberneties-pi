@@ -5,27 +5,24 @@
     path: /etc/environment
     regexp: '^\s*{{ item }}\s*='
   notify: reboot system
-  when: proxy_url != None
+  when: proxy_url != "None"
   with_items:
     - no_proxy
-    - NO_PROXY
 - name: add environment variables HTTP_PROXY and HTTPS_PROXY
   lineinfile:
     line: '{{ item }}={{ proxy_url }}'
     path: /etc/environment
     regexp: '^\s*{{ item }}\s*='
   notify: reboot system
-  when: proxy_url != None
+  when: proxy_url != "None"
   with_items:
     - http_proxy
-    - HTTP_PROXY
     - https_proxy
-    - HTTPS_PROXY
 - name: add apt proxies
   template:
     dest: /etc/apt/apt.conf.d/95proxies
     src: 95proxies.j2
-  when: proxy_url != None
+  when: proxy_url != "None"
 - name: update cache and upgrade dist
   apt:
     update_cache: yes
