@@ -29,15 +29,27 @@
     dest: /etc/apt/sources.list.d/kubernetes.list
   notify: apt-get update
 - meta: flush_handlers
-- name: install k8s
+- name: install k8s - kubernetes-cni {{ kubernetes_cni_version }}
   apt:
     name:
       - "kubernetes-cni={{ kubernetes_cni_version }}"
+    update_cache: yes
+- name: install k8s kubeadm {{ k8s_version }}
+  apt:
+    name:
       - "kubeadm={{ k8s_version }}"
+    update_cache: yes
+- name: install k8s kubectl {{ k8s_version }}
+  apt:
+    name:
       - "kubectl={{ k8s_version }}"
+    update_cache: yes
+- name: install k8s kubelet {{ k8s_version }}
+  apt:
+    name:
       - "kubelet={{ k8s_version }}"
     update_cache: yes
-- name: hold k8s updates
+- name: hold k8s updates @ {{ k8s_version }}
   dpkg_selections:
     name: "{{ item }}"
     selection: hold
