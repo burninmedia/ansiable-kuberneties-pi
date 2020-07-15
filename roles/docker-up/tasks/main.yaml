@@ -23,11 +23,11 @@
     - containerd.io
     - docker-ce
     - docker-ce-cli
-- name: install Docker daemon configuration
-  template:
-    dest: /etc/docker/daemon.json
-    src: daemon.json.j2
-  notify: restart Docker
+# - name: install Docker daemon configuration
+#   template:
+#     dest: /etc/docker/daemon.json
+#     src: daemon.json.j2
+#   notify: restart Docker
 - name: update environment variables
   lineinfile:
     insertafter: '^\s*\[\s*Service\s*\]'
