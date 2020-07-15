@@ -1,63 +1,39 @@
 ---
 all:
   hosts:
-    node-0:
-      ansible_host: 192.168.71.20
-    node-1:
-      ansible_host: 192.168.71.21
-    node-2:
-      ansible_host: 192.168.71.22
-    node-3:
-      ansible_host: 192.168.71.23
-    node-4:
-      ansible_host: 192.168.71.24
-    node-5:
-      ansible_host: 192.168.71.25
-    node-6:
-      ansible_host: 192.168.71.26
+    k8s-node1:
+      ansible_host: 10.0.0.151
+    k8s-node2:
+      ansible_host: 10.0.0.152
   children:
     k3s_master:
       hosts:
         # At most one master:
-        node-1: {}
     k3s_worker:
       hosts:
         # At least one worker unless there is no master:
-        node-0: {}
-        node-2: {}
-        node-3: {}
-        node-4: {}
-        node-5: {}
-        node-6: {}
     k8s_master:
       hosts:
         # At most one master:
+        k8s-node1: {}
     k8s_worker:
       hosts:
+        k8s-node1: {}
+        k8s-node2: {}
         # At least one worker unless there is no master:
     raspberry_pi:
       hosts:
-        node-0: {}
-        node-1: {}
-        node-2: {}
-        node-3: {}
-        node-4: {}
-        node-5: {}
-        node-6: {}
+        k8s-node1: {}
+        k8s-node2: {}
     raspbian:
       hosts:
+        k8s-node1: {}
+        k8s-node2: {}
       vars:
         ansible_ssh_user: pi
         boot_directory: /boot
     ubuntu:
       hosts:
-        node-0: {}
-        node-1: {}
-        node-2: {}
-        node-3: {}
-        node-4: {}
-        node-5: {}
-        node-6: {}
       vars:
         ansible_ssh_user: ubuntu
         boot_directory: /boot/firmware
@@ -77,7 +53,7 @@ all:
     #kubernetes_cni_version: 0.7.5-00 # (https://github.com/containernetworking/plugins/releases)
     #locale: C.UTF-8
     # Make sure to match all nodes and the `docker_registry_mirror_url`:
-    #no_proxy: 10.0.0.0/8,127.0.0.0/8,192.168.0.0/16,*.local,localhost
+    no_proxy: 10.0.0.0/8,127.0.0.0/8,192.168.0.0/16,*.local,localhost
     # Make sure to use an IP address, not a hostname, or otherwise expect the Kubernetes setup to fail:
-    #proxy_url: http://10.0.0.1:3128/
+    proxy_url: None
     #timezone: UTC
