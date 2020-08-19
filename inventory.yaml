@@ -5,6 +5,8 @@ all:
       ansible_host: 10.0.0.151
     k8s-node2:
       ansible_host: 10.0.0.152
+    k8s-node4:
+      ansible_host: 10.0.0.154
   children:
     k3s_master:
       hosts:
@@ -20,15 +22,18 @@ all:
       hosts:
         k8s-node1: {}
         k8s-node2: {}
+        k8s-node4: {}
         # At least one worker unless there is no master:
     raspberry_pi:
       hosts:
         k8s-node1: {}
         k8s-node2: {}
+        k8s-node4: {}
     raspbian:
       hosts:
         k8s-node1: {}
         k8s-node2: {}
+        k8s-node4: {}
       vars:
         ansible_ssh_user: pi
         boot_directory: /boot
@@ -49,8 +54,8 @@ all:
     #docker_registry_mirror_url: https://my-docker-registry-mirror.local/
     #docker_version: "5:19.03.11~3-0~{{ ansible_lsb.id.lower() }}-{{ ansible_lsb.codename.lower() }}" # (https://docs.docker.com/install/linux/docker-ce/ubuntu/)
     #k3s_version: v1.17.7+k3s1 # (https://github.com/rancher/k3s/releases)
-    #k8s_version: 1.17.7-00 # (https://github.com/kubernetes/kubernetes/releases)
-    #kubernetes_cni_version: 0.7.5-00 # (https://github.com/containernetworking/plugins/releases)
+    k8s_version: 1.18.8-00 # (https://github.com/kubernetes/kubernetes/releases)
+    kubernetes_cni_version: 0.8.6-00 # (https://github.com/containernetworking/plugins/releases)
     #locale: C.UTF-8
     # Make sure to match all nodes and the `docker_registry_mirror_url`:
     no_proxy: 10.0.0.0/8,127.0.0.0/8,192.168.0.0/16,*.local,localhost
