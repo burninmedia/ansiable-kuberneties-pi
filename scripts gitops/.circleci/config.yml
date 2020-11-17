@@ -1,0 +1,53 @@
+version: 2.0
+
+workflows:
+  version: 2
+
+  # Run the start-component-build workflow whenever a tag shows up that looks like this
+  # start-component-build/COMPONENT_NAME
+  # Where COMPONENT_NAME comes from the main keys in the ./components.yaml file of this repo
+  start-component-build:
+    jobs:
+      - start-component-build:
+          context: orca-build
+          filters:
+            tags:
+              # start-component-build/<component name>/<type>/<unts>
+              only: /^start-component-build\/.*\/.*\/.*$/
+            branches:
+              ignore: /.*/
+
+  # Run the build-version-tagged-component workflow when a tag shows up that looks like this
+  # component-version/<component name>/<version>
+  build-version-tagged-component:
+    jobs:
+      - build-version-tagged-component:
+          context: orca-build
+          # Ignore all branches and only run this workflow jobs against semver tagged commits
+          filters:
+            tags:
+              # component-version/<component name>/<version/type>
+              only: /^component-version\/.*\/.*$/
+            branches:
+              ignore: /.*/
+
+jobs:
+  start-component-build:
+    docker:
+      - image: quay.io/wowzaprivate/wowza-builder:1.0.4
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Start Component Build
+          command: ". ./.circleci/jobs/start-component-build.sh"
+
+  build-version-tagged-component:
+    docker:
+      - image: quay.io/wowzaprivate/wowza-builder:1.0.4
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build Version Tagged Component
+          command: ". ./.circleci/jobs/build-version-tagged-component.sh"

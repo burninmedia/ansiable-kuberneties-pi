@@ -1,0 +1,40 @@
+
+jobs: 
+  deploy-context-orca-non-prod-deploy:
+    docker:
+      - image: quay.io/wowzaprivate/wowza-builder:1.0.4
+    steps:
+      - checkout
+      - run:
+          name: Start deploy using orca-non-prod-deploy context
+          command: ". ./.circleci/jobs/do-deploy.sh"
+  deploy-context-orca-prod-deploy:
+    docker:
+      - image: quay.io/wowzaprivate/wowza-builder:1.0.4
+    steps:
+      - checkout
+      - run:
+          name: Start deploy using orca-prod-deploy context
+          command: ". ./.circleci/jobs/do-deploy.sh"
+
+version: 2.1
+workflows:
+  deploy-context-orca-non-prod-deploy:
+    jobs:
+      - deploy-context-orca-non-prod-deploy:
+          context: orca-non-prod-deploy
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^deploy\/orca-non-prod-deploy\/.*$/
+  deploy-context-orca-prod-deploy:
+    jobs:
+      - deploy-context-orca-prod-deploy:
+          context: orca-prod-deploy
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^deploy\/orca-prod-deploy\/.*$/
+
