@@ -27,6 +27,7 @@ RUN echo "echo 'source <(kubectl completion bash)' >> /root/.bashrc" >> /root/ru
 RUN echo "/bin/bash $1" >> /root/run-first.sh
 RUN kubectl completion bash >/etc/bash_completion.d/kubectl
 
-WORKDIR /workdir
-COPY . ./
-RUN mv .bashrc .ssh /root && chmod -R go-rwx /root/.ssh
+# WORKDIR /workdir
+# RUN ls -la
+# COPY . ./
+# RUN mv .bashrc /root && chmod -R go-rwx /root/.ssh
